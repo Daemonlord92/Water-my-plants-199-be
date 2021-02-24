@@ -14,7 +14,7 @@ module.exports = {
     },
   },
 
-  staging: {
+  testing: {
     client: 'pg',
     connection: process.env.DB_URL,
     migrations: {
