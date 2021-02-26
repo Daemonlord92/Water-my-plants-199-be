@@ -6,7 +6,7 @@ const Plant = require('./plant-model');
 const validPlant = {
 	nickname: 'Bob',
 	h20Frequency: 3,
-	species_name: "Cannabis",
+	speciesName: "Cannabis",
 	image: 'null'
 };
 

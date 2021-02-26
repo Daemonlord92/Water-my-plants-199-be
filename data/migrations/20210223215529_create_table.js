@@ -10,7 +10,7 @@ exports.up = function(knex) {
   	tbl.increments();
   	tbl.string('nickname', 255).notNullable();
   	tbl.integer('h20Frequency').notNullable();
-  	tbl.string('speciesName', 255).notNullable().unique();
+  	tbl.string('speciesName', 255).notNullable();
   	tbl.integer('userId').unsigned().notNullable().references('users.id');
   	tbl.string('image', 3052);
   })

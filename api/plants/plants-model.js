@@ -10,19 +10,18 @@ module.exports = {
 
 async function find() {
 	return await db("plants as p")
-		.select("p.id", "p.nickname", "p.h20Frequency", "p.species_name", "p.image");
+		.select("p.id", "p.nickname", "p.h20Frequency", "p.speciesName", "p.image");
 };
 
 async function findById(id) {
 	return await db("plants as p")
-		.select("p.id", "p.nickname", "p.h20Frequency", "p.species_name", "p.image")
+		.select("p.id", "p.nickname", "p.h20Frequency", "p.speciesName", "p.image")
 		.where("p.id", id)
 		.first();
 };
 
 async function addPlant(plantData) {
-	const [id] = await db("plants").insert(plantData).returning('id');
-	return findById(id);
+	return await db("plants").insert(plantData);
 }
 
 async function updatePlant(changes, id) {
@@ -30,7 +29,7 @@ async function updatePlant(changes, id) {
 		.where('id', id)
 		.update(changes)
 		.then(ids => {
-			return await db("plants").where("id", id);
+			return db("plants").where("id", id);
 		});
 };
 
