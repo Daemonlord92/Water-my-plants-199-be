@@ -2,6 +2,7 @@ const db = require("../../data/dbConfig");
 
 module.exports = {
 	addUser,
+	editUser,
 	find,
 	findById,
 	findBy

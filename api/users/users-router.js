@@ -1,9 +1,19 @@
 const router = require('express').Router();
-const Users = require('./users-model');
-
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const restrict = require('../middleware/restricted');
+const Users = require('./users-model');
 const {jwtSecret} = require('../config/secret.js');
+
+router.get('/', async (req, res, next) => {
+
+	try {
+		const userData = await Users.find();
+		res.status(200).json(userData);
+	} catch (err) {
+		next(err);
+	}
+})
 
 router.post('/register', async (req, res, next) => {
 	const data = req.body;
@@ -45,9 +55,23 @@ router.post('/login', async (req, res, next) => {
 	}
 })
 
-// router.put('/edit-user', async (req, res, next) => {
-	
-// })
+router.put('/edit-user/:id', /*restrict,*/ async (req, res, next) => {
+	const { id } = req.params;
+	const changes = req.body;
+
+	try {
+		const changedUserInfo = await Users.editUser(id, changes);
+		if (changedUserInfo) {
+			res.status(204).json(changedUserInfo);
+		} else {
+			res.status(404).json({
+				mes: 'invalid id'
+			});
+		} 
+	}	catch (err) {
+			next(err);
+	};
+});
 
 function createToken(user) {
   const payload = {
@@ -55,7 +79,7 @@ function createToken(user) {
       username: user.username,
   }
   const options = {
-      expiresIn: '60 seconds'
+      expiresIn: '2h'
   }
   return jwt.sign(payload, jwtSecret, options)
 }
