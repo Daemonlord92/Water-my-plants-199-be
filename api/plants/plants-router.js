@@ -24,7 +24,7 @@ router.post('/new-plants', async (req, res, next) => {
 
 router.put('/edit-plants/:id', async (req, res, next) => {
 	const { id } = req.params;
-	const changes = res.body;
+	const changes = req.body;
 
 	try {
 		const changedData = await Plants.updatePlant(id, changes);

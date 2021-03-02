@@ -24,13 +24,10 @@ async function addPlant(plantData) {
 	return await db("plants").insert(plantData);
 }
 
-async function updatePlant(changes, id) {
+async function updatePlant(id, changes) {
 	return await db("plants")
 		.where('id', id)
-		.update(changes)
-		.then(ids => {
-			return db("plants").where("id", id);
-		});
+		.update(changes, '*');
 };
 
 async function deletePlant(id) {
