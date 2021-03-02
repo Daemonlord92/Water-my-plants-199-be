@@ -5,7 +5,7 @@ const restrict = require('../middleware/restricted');
 const Users = require('./users-model');
 const {jwtSecret} = require('../config/secret.js');
 
-router.get('/', async (req, res, next) => {
+router.get('/', restrict, async (req, res, next) => {
 
 	try {
 		const userData = await Users.find();
@@ -55,7 +55,7 @@ router.post('/login', async (req, res, next) => {
 	}
 })
 
-router.put('/edit-user/:id', /*restrict,*/ async (req, res, next) => {
+router.put('/edit-user/:id', restrict, async (req, res, next) => {
 	const { id } = req.params;
 	const changes = req.body;
 
@@ -78,10 +78,13 @@ function createToken(user) {
       subject: user.id,
       username: user.username,
   }
+
+  const secret = jwtSecret;
+
   const options = {
       expiresIn: '2h'
   }
-  return jwt.sign(payload, jwtSecret, options)
+  return jwt.sign(payload, secret, options)
 }
 
 
