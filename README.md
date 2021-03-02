@@ -11,6 +11,8 @@ Planned Routes
 ### /api/auth/edit-user/:id
 		Get Plants Path
 ### /api/plants
+		Get Plants Path by user id
+### /api/plants/:id
 		New Plant Path
 ### /api/plants/new-plants
 		Edit Plants Path

@@ -11,6 +11,17 @@ router.get('/', async (req, res, next) => {
 	};
 });
 
+router.get('/:id', async (req, res, next) => {
+	const { id } = req.params;
+
+	try {
+		const plantData = await Plants.findByUserId(id);
+		res.status(200).json(plantData);
+	} catch (err) {
+		next(err);
+	};
+});
+
 router.post('/new-plants', async (req, res, next) => {
 	const plantData = req.body;
 
@@ -24,7 +35,7 @@ router.post('/new-plants', async (req, res, next) => {
 
 router.put('/edit-plants/:id', async (req, res, next) => {
 	const { id } = req.params;
-	const changes = res.body;
+	const changes = req.body;
 
 	try {
 		const changedData = await Plants.updatePlant(id, changes);
