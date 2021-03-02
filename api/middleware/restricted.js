@@ -6,15 +6,19 @@ module.exports = (req, res, next) => {
     res.status(401).json({
       message: 'you are not authorized to view this page'
       })
+    } else {
+
+      jwt.verify(token, secrets.jwtSecret, (error, decodedToken) => {
+        if(error) {
+          res.status(401).json({
+            message: 'token does not exist', error
+          })
+        } else {
+
+        console.log('decoded token ->', decodedToken)
+        req.decodedJWT = decodedToken
+        next()
+        }
+      })
     }
-    jwt.verify(JSON.parse(token), secrets, (error, decodedToken) => {
-      if(error) {
-        res.status(401).json({
-          message: 'token does not exist', error
-        })
-      }
-      console.log('decoded token ->', decodedToken)
-      req.decodedJWT = decodedToken
-      next()
-    })
 };
