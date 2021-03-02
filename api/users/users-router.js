@@ -59,18 +59,36 @@ router.put('/edit-user/:id', restrict, async (req, res, next) => {
 	const { id } = req.params;
 	const changes = req.body;
 
-	try {
-		const changedUserInfo = await Users.editUser(id, changes);
-		if (changedUserInfo) {
-			res.status(204).json(changedUserInfo);
-		} else {
-			res.status(404).json({
-				mes: 'invalid id'
-			});
-		} 
-	}	catch (err) {
-			next(err);
-	};
+	if (!changes.password) {
+		try {
+			const changedUserInfo = await Users.editUser(id, changes);
+			if (changedUserInfo) {
+				res.status(204).json(changedUserInfo);
+			} else {
+				res.status(404).json({
+					mes: 'invalid id'
+				});
+			} 
+		}	catch (err) {
+				next(err);
+		};		
+	} else {
+		try {
+			const hash = bcrypt.hashSync(changes.password);
+			changes.password = hash;
+			const changedUserInfo = await Users.editUser(id, changes);
+			if (changedUserInfo) {
+				res.status(204).json(changedUserInfo);
+			} else {
+				res.status(404).json({
+					mes: 'invalid id'
+				});
+			} 
+		}	catch (err) {
+				next(err);
+		};
+	}
+
 });
 
 function createToken(user) {
